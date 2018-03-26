@@ -1,0 +1,1 @@
+ cat /sys/class/net/bond0/speed

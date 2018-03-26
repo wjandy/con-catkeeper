@@ -1,0 +1,5 @@
+<disk type="file" device="disk">
+  <driver name="qemu" type="qcow2" cache="none"/>
+  <source file="/home/{{.VolUuid}}"/>
+  <target dev="{{.AttachPoint}}" bus="virtio"/>
+</disk>

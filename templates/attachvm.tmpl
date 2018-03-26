@@ -1,0 +1,13 @@
+<disk type='network' device='disk'>
+  <driver name='qemu' type='raw' cache='writeback'/>
+  <auth username='admin'>
+    <secret type='ceph' usage='cephadmin'/>
+  </auth>
+  <source protocol='rbd' name='catkeeper/{{.VolUuid}}'>
+    <host name='10.72.84.145' port='6789'/>
+    <host name='10.72.84.146' port='6789'/>
+    <host name='10.72.84.147' port='6789'/>
+  </source>
+  <target dev='{{.AttachPoint}}' bus='virtio'/>
+</disk>
+

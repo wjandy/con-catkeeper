@@ -1,0 +1,55 @@
+<domain type='kvm'>
+  <name>{{.Name}}</name>
+  <uuid>{{.Uuid}}</uuid>
+  <memory unit='GiB'>{{.Mem}}</memory>
+  <currentMemory unit='GiB'>{{.Mem}}</currentMemory>
+  <vcpu placement='static'>{{.Cpu}}</vcpu>
+  <os>
+    <type>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+  </features>
+
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <emulator>/usr/libexec/qemu-kvm</emulator>
+    <disk type='network' device='disk'>
+      <driver name='qemu' type='qcow2' cache='writeback'/>
+      <auth username='admin'>
+        <secret type='ceph' usage='cephadmin'/>
+      </auth>
+      <source protocol='rbd' name='catkeeper/{{.SysDisk}}'>
+        <host name='10.72.84.145' port='6789'/>
+        <host name='10.72.84.146' port='6789'/>
+        <host name='10.72.84.147' port='6789'/>
+      </source>
+      <target dev='vda' bus='virtio'/>
+    </disk>
+    <interface type='bridge'>
+      <source bridge='vmbridge'/>
+      <target dev='vnet3'/>
+      <model type='virtio'/>
+      <alias name='net0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+    </interface>
+    <input type='mouse' bus='ps2'>
+      <alias name='input1'/>
+    </input>
+    <input type='keyboard' bus='ps2'>
+      <alias name='input2'/>
+    </input>
+    <graphics type='vnc' autoport='yes' listen='0.0.0.0' keymap='en-us'>
+      <listen type='address' address='0.0.0.0'/>
+    </graphics>
+    <video>
+      <model type='cirrus' vram='16384' heads='1' primary='yes'/>
+      <alias name='video0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/>
+    </video>
+  </devices>
+</domain>
